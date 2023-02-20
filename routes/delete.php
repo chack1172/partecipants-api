@@ -26,7 +26,7 @@ if ($partecipant->has_audio) {
     unlink(Config::AUDIO_PATH . $partecipant->audio_path);
 }
 
-$sql = 'DELETE FROM partecipants WHERE "_id" = :id LIMIT 1;';
+$sql = 'DELETE FROM partecipants WHERE "_id" = :id;';
 $stmt = $app->db->prepare($sql);
 $stmt->execute(['id' => $id]);
 
