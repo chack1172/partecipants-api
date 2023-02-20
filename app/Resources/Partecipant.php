@@ -20,13 +20,12 @@ class Partecipant extends Resource
             $audio = '';
         }
 
-        return [
-            ...parent::toArray(),
+        return array_merge(parent::toArray(), [
             'has_image' => (bool) $this->has_image,
             'has_audio' => (bool) $this->has_audio,
             'active' => (bool) $this->active,
             'image' => $image,
             'audio' => $audio
-        ];
+        ]);
     }
 }
