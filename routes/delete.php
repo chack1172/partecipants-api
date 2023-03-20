@@ -3,6 +3,7 @@
 use App\Application;
 use App\Config;
 use App\Resources\Partecipant;
+use App\Utils\PartecipantCleaner;
 
 require_once '../init.php';
 
@@ -18,9 +19,9 @@ $stmt = $app->db->prepare($sql);
 $stmt->execute(['id' => $id]);
 $partecipant = $stmt->fetchObject();
 
-
+$cleaner = new PartecipantCleaner();
 if ($partecipant->has_image) {
-    unlink(Config::IMAGES_PATH . $partecipant->image_path);
+    $partecipant->cleanImages($partecipant->image_path);
 }
 if ($partecipant->has_audio) {
     unlink(Config::AUDIO_PATH . $partecipant->audio_path);

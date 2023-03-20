@@ -3,13 +3,32 @@
 namespace App\Resources;
 
 use App\Config;
+use App\Utils\ImageResizer;
 
 class Partecipant extends Resource
 {
+    private $imageResizer;
+
+    public function __construct(
+        protected $data
+    )
+    {
+        $this->imageResizer = new ImageResizer();
+    }
+
     public function toArray(): array
     {
         if ($this->has_image) {
-            $image = base64_encode(file_get_contents(Config::IMAGES_PATH . $this->image_path));
+            $resizedFolder = Config::IMAGES_PATH . Config::IMAGE_WIDTH . 'x' . Config::IMAGE_HEIGHT . '/';
+            $resizedImagePath = $resizedFolder . $this->image_path;
+            if (!file_exists($resizedImagePath)) {
+                $imagePath = Config::IMAGES_PATH . $this->image_path;
+                if (!is_dir($resizedFolder)) {
+                    mkdir($resizedFolder);
+                }
+                $this->imageResizer->resize($imagePath, $resizedImagePath, Config::IMAGE_WIDTH, Config::IMAGE_HEIGHT);
+            }
+            $image = base64_encode(file_get_contents($resizedImagePath));
         } else {
             $image = '';
         }

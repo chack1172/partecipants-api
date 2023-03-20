@@ -2,6 +2,7 @@
 
 use App\Application;
 use App\Resources\Partecipant;
+use App\Utils\PartecipantCleaner;
 
 require_once '../init.php';
 
@@ -24,7 +25,9 @@ $data = [
 $image = $_POST['image'] ?? null;
 $audio = $_POST['audio'] ?? null;
 
+$cleaner = new PartecipantCleaner();
 if ($data['has_image'] && !empty($image)) {
+    $cleaner->cleanImages($data['image_path']);
     file_put_contents(ROOT . '/public/resources/images/' . $data['image_path'], base64_decode($image));
 }
 if ($data['has_audio'] && !empty($audio)) {
